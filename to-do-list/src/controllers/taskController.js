@@ -31,7 +31,26 @@ const listAllTasks = async (req, res, next) => {
   }
 };
 
+const updateStatusTask = async (req, res, next) => {
+  const id = req.params.id;
+  const status = req.params.status;
+  console.log(id, status);
+  try {
+    await connection.query(
+      `UPDATE tasks SET status =${status} WHERE id =${id}`,
+      (err, result) => {
+        if (err) {
+          throw new ErrorHandler(400, "Can't Update");
+        }
+        res.status(200).send({ data: result });
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   addNewTask,
   listAllTasks,
+  updateStatusTask,
 };
