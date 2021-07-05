@@ -18,7 +18,6 @@ const signUp = async (req, res, next) => {
       (err) => {
         if (err) throw new ErrorHandler(400, 'Something Went Wrong');
         console.log('User Added');
-
         return res.status(200).send({ data: newUser.values });
       }
     );
@@ -26,35 +25,22 @@ const signUp = async (req, res, next) => {
     next(error);
   }
 };
+
 const signIn = async (req, res, next) => {
-  // const { body } = req;
-  // console.log(body.email);
-  // const useWithEmail = await connection.query(
-  //   `SELECT * FROM users WHERE "email"= ${body.email}`,
-  //   (err) => {
-  //     if (err) throw new ErrorHandler(400, 'Not Found');
-  //     return res.send({ data: useWithEmail.values });
-  //   }
-  // );
-  // console.log(useWithEmail.values, 'with email');
-  // // const isMatch = await bcrypt.compare(body.password, body.password);
-  // // if (!isMatch) {
-  // //   throw new ErrorHandler(400, 'Unable To Login');
-  // // }
-  // try {
-  //   const userLogined = await connection.query(
-  //     `SELECT name , email FROM users WHERE email = ${body.email} and password = ${body.password}`,
-  //     (err) => {
-  //       if (err) throw new ErrorHandler(400, 'Something Went Wrong');
-  //       console.log(userLogined, 'user logined');
-  //       const token = jwt.sign({}, 'secret_key', { expiresIn: '5m' });
-  //       userLogined.token = token;
-  //       res.status(200).send({ data: userLogined, token: token });
-  //     }
-  //   );
-  // } catch (error) {
-  //   next(error);
-  // }
+  const { body } = req;
+  const useWithEmail = await connection.query(
+    `SELECT name , password , email FROM users WHERE email= "${body.email}"`,
+    async (err, result) => {
+      if (err) throw new ErrorHandler(400, 'Not Found');
+      const isMatch = await bcrypt.compare(body.password, result[0].password);
+      if (isMatch) {
+        const token = jwt.sign({}, 'secret_key', { expiresIn: '5m' });
+        result[0].token = token;
+        return res.send({ data: result[0] });
+      }
+      return res.status(400).send({ error: 'Unable To Login' });
+    }
+  );
 };
 
 module.exports = {
