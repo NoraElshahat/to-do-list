@@ -10,8 +10,6 @@ const signUp = async (req, res, next) => {
     body.password = await bcrypt.hash(body.password, 8);
   }
   try {
-    // const token = jwt.sign({}, 'secret_key', { expiresIn: '5m' });
-    // newUser.token = token;
     const newUser = await connection.query(
       'INSERT INTO users SET ? ',
       body,
@@ -26,12 +24,12 @@ const signUp = async (req, res, next) => {
   }
 };
 
-const signIn = async (req, res, next) => {
+const signIn = async (req, res) => {
   const { body } = req;
   const useWithEmail = await connection.query(
     `SELECT name , password , email FROM users WHERE email= "${body.email}"`,
     async (err, result) => {
-      if (err) throw new ErrorHandler(400, 'Not Found');
+      if (err) return res.status(400).send({ error: 'Not Found' });
       const isMatch = await bcrypt.compare(body.password, result[0].password);
       if (isMatch) {
         const token = jwt.sign({}, 'secret_key', { expiresIn: '5m' });
