@@ -8,7 +8,7 @@ const addNewTask = async (req, res, next) => {
       'INSERT INTO tasks SET ?',
       body,
       (err) => {
-        if (err) throw new ErrorHandler(400, 'Somthing Went Worng');
+        if (err) console.log(err.message);
         console.log('Task addedd');
         res.status(200).send({ data: newTask.values });
       }
