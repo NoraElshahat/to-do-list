@@ -34,7 +34,6 @@ const listAllTasks = async (req, res, next) => {
 const updateStatusTask = async (req, res, next) => {
   const id = req.params.id;
   const status = req.params.status;
-  console.log(id, status);
   try {
     await connection.query(
       `UPDATE tasks SET status =${status} WHERE id =${id}`,

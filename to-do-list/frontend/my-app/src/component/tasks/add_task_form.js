@@ -3,13 +3,10 @@ import axios from 'axios';
 import './form-style.css';
 import { useHistory } from 'react-router-dom';
 
-function AddTask() {
+export default function AddTask() {
   //   let history = useHistory();
   const [task, setTask] = useState({ title: '', description: '', price: '' });
 
-  function hanldeData(e) {
-    setTask({ ...task, [e.target.name]: e.target.value });
-  }
   function taskAdded(e) {
     e.preventDefault();
     axios.post('http://localhost:4000/tasks/add-task', task).then((res) => {
@@ -20,6 +17,11 @@ function AddTask() {
       //   }
     });
   }
+
+  function hanldeData(e) {
+    setTask({ ...task, [e.target.name]: e.target.value });
+  }
+
   return (
     <div className="container ">
       <div className="row center_div mt-5">
@@ -65,5 +67,3 @@ function AddTask() {
     </div>
   );
 }
-
-export default AddTask;
