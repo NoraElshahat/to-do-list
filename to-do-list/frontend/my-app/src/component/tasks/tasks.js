@@ -6,11 +6,14 @@ import './tasks-style.css';
 
 const Tasks = () => {
   const [tasks, updateTasks] = useState([]);
+  const [isFreelance, setFreelance] = useState(0);
   useEffect(() => {
     axios.get('http://localhost:4000/tasks/all-tasks').then((res) => {
       const all_tasks = res.data.data;
       updateTasks(all_tasks);
-      console.log(all_tasks);
+      const free = localStorage.getItem('freelance');
+      setFreelance(free);
+      console.log(free, 'free');
     });
   }, []);
   return (
@@ -19,7 +22,7 @@ const Tasks = () => {
         <img src="/add.png" width="50px" height="50" className="mt-5" />
       </Link>
 
-      <div className="col-lg-7 mt-5">
+      <div className="row mt-5">
         {tasks.map((task) => {
           return (
             <Draggable>
@@ -36,11 +39,38 @@ const Tasks = () => {
           );
         })}
       </div>
-      <div class="card">
-        <div class="card-body">
-          <p class="card-text"></p>
+      {isFreelance == 'undefined' ? (
+        <div className="row mt-5">
+          <div className="card col-lg-3" name="inprogress">
+            <div className="card-body">
+              <p className="card-text">Testing</p>
+            </div>
+          </div>
+          <div className="card col-lg-3" name="testing">
+            <div className="card-body">
+              <p className="card-text">Done</p>
+            </div>
+          </div>
+          <div className="card col-lg-3" name="testing">
+            <div className="card-body">
+              <p className="card-text">Paid</p>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="row mt-5">
+          <div className="card col-lg-3" name="inprogress">
+            <div className="card-body">
+              <p className="card-text">InProgress</p>
+            </div>
+          </div>
+          <div className="card col-lg-3" name="testing">
+            <div className="card-body">
+              <p className="card-text">Testing</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
