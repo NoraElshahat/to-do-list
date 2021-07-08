@@ -18,22 +18,6 @@ const Tasks = () => {
     });
   }, []);
 
-  // function handleStart(e) {
-  //   console.log('start');
-  // }
-  // function handleDrag(e) {
-  //   console.log('drag');
-  //   e.dataTransfer.setData('drag-item');
-  // }
-  // function handleStop(e) {
-  //   console.log('stop');
-  // }
-  // function dragOver(ev) {
-  //   ev.preventDefault();
-  // }
-  // function drop(ev) {
-  //   ev.dataTransfer.getData('drag-item');
-  // }
   return (
     <div className="container">
       <Link to="/add-task">
