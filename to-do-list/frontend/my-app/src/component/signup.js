@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
-export default function SignUp() {
+function SignUp() {
+  // let history = useHistory();
   const [user, setUser] = useState({
     name: '',
     email: '',
@@ -19,7 +20,6 @@ export default function SignUp() {
   }
   function userSignin(e) {
     e.preventDefault();
-    // let history = useHistory();
     axios.post('http://localhost:4000/users/signup', user).then((res) => {
       console.log(res.data.data, 'ssdsd');
       localStorage.setItem('freelance', res.data.data.freelancer);
@@ -83,3 +83,5 @@ export default function SignUp() {
     </div>
   );
 }
+
+export default SignUp;

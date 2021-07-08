@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Draggable from 'react-draggable';
 import './tasks-style.css';
+import Card from '../Card';
+import Board from '../Board';
 
 const Tasks = () => {
   const [tasks, updateTasks] = useState([]);
@@ -16,61 +17,81 @@ const Tasks = () => {
       console.log(free, 'free');
     });
   }, []);
+
+  // function handleStart(e) {
+  //   console.log('start');
+  // }
+  // function handleDrag(e) {
+  //   console.log('drag');
+  //   e.dataTransfer.setData('drag-item');
+  // }
+  // function handleStop(e) {
+  //   console.log('stop');
+  // }
+  // function dragOver(ev) {
+  //   ev.preventDefault();
+  // }
+  // function drop(ev) {
+  //   ev.dataTransfer.getData('drag-item');
+  // }
   return (
     <div className="container">
       <Link to="/add-task">
         <img src="/add.png" width="50px" height="50" className="mt-5" />
       </Link>
-
       <div className="row mt-5">
         {tasks.map((task) => {
           return (
-            <Draggable>
-              <div className="col-lg-3 mt-2 drag">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">{task.title}</h5>
-                    <p class="card-text">{task.description}</p>
-                    <p class="card-text">{task.price} EGP</p>
+            <div className="col-lg-3 mt-2">
+              <Card id={task.id}>
+                <div className="card drag">
+                  <div className="card-body">
+                    <h5 className="card-title">{task.title}</h5>
+                    <p className="card-text">{task.description}</p>
+                    <p className="card-text">{task.price} EGP</p>
                   </div>
                 </div>
-              </div>
-            </Draggable>
+              </Card>
+            </div>
           );
         })}
       </div>
-      {isFreelance == 'undefined' ? (
-        <div className="row mt-5">
-          <div className="card col-lg-3" name="inprogress">
-            <div className="card-body">
-              <p className="card-text">Testing</p>
+
+      <Board>
+        {isFreelance == 'undefined' ? (
+          <div className="row mt-5">
+            <div className="card col-lg-3 mr-2" name="inprogress">
+              <div className="card-body">
+                <p className="card-text">Testing</p>
+                <p style={{ height: '100px' }}></p>
+              </div>
+            </div>
+            <div className="card col-lg-3 mr-2" name="testing">
+              <div className="card-body">
+                <p className="card-text">Done</p>
+              </div>
+            </div>
+            <div className="card col-lg-3 mr-2" name="testing">
+              <div className="card-body">
+                <p className="card-text">Paid</p>
+              </div>
             </div>
           </div>
-          <div className="card col-lg-3" name="testing">
-            <div className="card-body">
-              <p className="card-text">Done</p>
+        ) : (
+          <div className="row mt-5">
+            <div className="card col-lg-3 mr-2" name="inprogress">
+              <div className="card-body">
+                <p className="card-text">InProgress</p>
+              </div>
+            </div>
+            <div className="card col-lg-3 mr-2" name="testing">
+              <div className="card-body">
+                <p className="card-text">Testing</p>
+              </div>
             </div>
           </div>
-          <div className="card col-lg-3" name="testing">
-            <div className="card-body">
-              <p className="card-text">Paid</p>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="row mt-5">
-          <div className="card col-lg-3" name="inprogress">
-            <div className="card-body">
-              <p className="card-text">InProgress</p>
-            </div>
-          </div>
-          <div className="card col-lg-3" name="testing">
-            <div className="card-body">
-              <p className="card-text">Testing</p>
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </Board>
     </div>
   );
 };
