@@ -34,9 +34,10 @@ const listAllTasks = async (req, res, next) => {
 const updateStatusTask = async (req, res, next) => {
   const id = req.params.id;
   const status = req.params.status;
+
   try {
     await connection.query(
-      `UPDATE tasks SET status =${status} WHERE id =${id}`,
+      `UPDATE tasks SET status ="${status}" WHERE id =${id}`,
       (err, result) => {
         if (err) {
           throw new ErrorHandler(400, "Can't Update");

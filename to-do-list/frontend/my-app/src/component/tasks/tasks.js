@@ -42,34 +42,53 @@ const Tasks = () => {
       </div>
 
       <Board>
-        {isFreelance == 'undefined' ? (
+        {isFreelance == 'undefined' || 'null' ? (
           <div className="row mt-5">
-            <div className="card col-lg-3 mr-2" name="inprogress">
-              <div className="card-body">
+            <div
+              className="card col-lg-3 mr-2"
+              name="testing"
+              style={{ height: '500px' }}
+            >
+              <div className="card-body" name="testing">
                 <p className="card-text">Testing</p>
-                <p style={{ height: '100px' }}></p>
               </div>
             </div>
-            <div className="card col-lg-3 mr-2" name="testing">
-              <div className="card-body">
+            <div
+              className="card col-lg-3 mr-2"
+              name="done"
+              style={{ height: '500px' }}
+            >
+              <div className="card-body" name="done">
                 <p className="card-text">Done</p>
               </div>
             </div>
-            <div className="card col-lg-3 mr-2" name="testing">
-              <div className="card-body">
+            <div
+              className="card col-lg-3 mr-2"
+              name="paid"
+              style={{ height: '500px' }}
+            >
+              <div className="card-body" name="paid">
                 <p className="card-text">Paid</p>
               </div>
             </div>
           </div>
         ) : (
           <div className="row mt-5">
-            <div className="card col-lg-3 mr-2" name="inprogress">
-              <div className="card-body">
+            <div
+              className="card col-lg-3 mr-2"
+              name="inprogress"
+              style={{ height: '500px' }}
+            >
+              <div className="card-body" name="inprogress">
                 <p className="card-text">InProgress</p>
               </div>
             </div>
-            <div className="card col-lg-3 mr-2" name="testing">
-              <div className="card-body">
+            <div
+              className="card col-lg-3 mr-2"
+              name="testing"
+              style={{ height: '500px' }}
+            >
+              <div className="card-body" name="testing">
                 <p className="card-text">Testing</p>
               </div>
             </div>
