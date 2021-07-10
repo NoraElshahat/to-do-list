@@ -20,7 +20,7 @@ const addNewTask = async (req, res, next) => {
 
 const listAllTasks = async (req, res, next) => {
   try {
-    await connection.query('SELECT * FROM tasks', (err, rows) => {
+    await connection.query('SELECT * FROM tasks ', (err, rows) => {
       if (err) {
         throw new ErrorHandler(400, 'Somthing Went Worng');
       }

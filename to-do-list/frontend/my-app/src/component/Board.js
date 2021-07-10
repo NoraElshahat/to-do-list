@@ -9,11 +9,8 @@ function Board(props) {
     e.target.appendChild(card);
     const status = e.target.getAttribute('name');
     const id = card.id;
-    axios
-      .patch(`http://localhost:4000/tasks/alter-task/${id}/${status}`)
-      .then((res) => {
-        console.log(res.data, 'updated');
-      });
+    console.log(e.target, 'board');
+    axios.patch(`http://localhost:4000/tasks/alter-task/${id}/${status}`);
   };
   const dragOver = (e) => {
     e.preventDefault();
