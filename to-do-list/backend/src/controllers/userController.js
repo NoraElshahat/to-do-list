@@ -27,7 +27,7 @@ const signUp = async (req, res, next) => {
 const signIn = async (req, res) => {
   const { body } = req;
   const useWithEmail = await connection.query(
-    `SELECT name , password , email , freelancer FROM users WHERE email= "${body.email}"`,
+    `SELECT name , password , email , freelancer, wallet_amount FROM users WHERE email= "${body.email}"`,
     async (err, result) => {
       if (err) return res.status(400).send({ error: 'Not Found' });
       const isMatch = await bcrypt.compare(body.password, result[0].password);

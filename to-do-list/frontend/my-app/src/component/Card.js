@@ -9,6 +9,9 @@ function Card(props) {
   return (
     <div
       id={props.id}
+      price={props.price}
+      title={props.title}
+      description={props.description}
       onDragStart={dragStart}
       onDragOver={dragOver}
       draggable="true"

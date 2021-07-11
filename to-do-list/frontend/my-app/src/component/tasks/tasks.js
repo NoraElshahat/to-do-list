@@ -12,15 +12,12 @@ const Tasks = () => {
   const [testingTasks, updateTesting] = useState([]);
   const [InprogressTasks, updateinprogress] = useState([]);
   const [toDoTasks, updateToDoTasks] = useState([]);
-  const [isFreelance, setFreelance] = useState(0);
+  const [isFreelance, updateFreelance] = useState(true);
   useEffect(() => {
     axios.get('http://localhost:4000/tasks/all-tasks').then((res) => {
       const all_tasks = res.data.data;
-      console.log(all_tasks);
-      // updateToDoTasks(all_tasks);
-      // console.log(toDoTasks);
       const free = localStorage.getItem('freelance');
-      setFreelance(free);
+      updateFreelance(free);
       const groupBy = (array, key) => {
         return array.reduce((result, currentValue) => {
           (result[currentValue[key]] = result[currentValue[key]] || []).push(
@@ -30,14 +27,13 @@ const Tasks = () => {
         }, {});
       };
       const tasksWithStatus = groupBy(all_tasks, 'status');
-      console.log(tasksWithStatus);
       updateDone(tasksWithStatus.DONE);
       updatePaid(tasksWithStatus.PAID);
       updateTesting(tasksWithStatus.TESTING);
       updateinprogress(tasksWithStatus.INPROGRESS);
       updateToDoTasks(tasksWithStatus.TODO);
+      updateinprogress(tasksWithStatus.INPROGRESS);
     });
-    console.log(toDoTasks, 'fff');
   }, []);
 
   return (
@@ -47,35 +43,88 @@ const Tasks = () => {
       </Link>
 
       <Board>
-        <div className="row mt-3">
-          {/* todo */}
+        {isFreelance == 'undefiend' || 'null' || 0 ? (
+          <div className="row mt-3">
+            {/* todo */}
 
-          {!toDoTasks ? (
-            <div
-              className="card col-lg-3 mr-2"
-              name="paid"
-              style={{ height: '500px' }}
-            >
-              <p className="card-text">tODO</p>
-            </div>
-          ) : (
-            <>
+            {!toDoTasks ? (
               <div
                 className="card col-lg-3 mr-2"
                 name="todo"
                 style={{ height: '500px' }}
               >
-                <p className="card-text">To Do</p>
-                {toDoTasks ? (
-                  toDoTasks.map((task) => {
+                <p className="card-text">TODO</p>
+              </div>
+            ) : (
+              <>
+                <div
+                  className="card col-lg-3 mr-2"
+                  name="todo"
+                  style={{ height: '500px' }}
+                >
+                  <p className="card-text">To Do</p>
+                  {toDoTasks ? (
+                    toDoTasks.map((task) => {
+                      return (
+                        <div className="col-lg-12 mt-2">
+                          <Card
+                            id={task.id}
+                            price={task.price}
+                            title={task.title}
+                            description={task.description}
+                          >
+                            <div className="card drag">
+                              <div className="card-body">
+                                <h5 className="card-title">{task.title}</h5>
+                                <p className="card-text">{task.description}</p>
+                                <p className="card-text" name="price">
+                                  {task.price} EGP
+                                </p>
+                              </div>
+                            </div>
+                          </Card>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </>
+            )}
+            {/* testing */}
+            {!testingTasks ? (
+              <div
+                className="card col-lg-3 mr-2"
+                name="testing"
+                style={{ height: '500px' }}
+              >
+                <p className="card-text">Testing</p>
+              </div>
+            ) : (
+              <div
+                className="card col-lg-3 mr-2"
+                name="testing"
+                style={{ height: '500px' }}
+              >
+                <p className="card-text">Testing</p>
+                {testingTasks ? (
+                  testingTasks.map((task) => {
                     return (
                       <div className="col-lg-12 mt-2">
-                        <Card id={task.id}>
+                        <Card
+                          id={task.id}
+                          price={task.price}
+                          title={task.title}
+                          description={task.description}
+                        >
                           <div className="card drag">
                             <div className="card-body">
                               <h5 className="card-title">{task.title}</h5>
                               <p className="card-text">{task.description}</p>
-                              <p className="card-text">{task.price} EGP</p>
+                              <p className="card-text" name="price">
+                                {task.price} EGP
+                              </p>
                             </div>
                           </div>
                         </Card>
@@ -86,68 +135,170 @@ const Tasks = () => {
                   <></>
                 )}
               </div>
-            </>
-          )}
-          {/* testing */}
-          {!testingTasks ? (
-            <div
-              className="card col-lg-3 mr-2"
-              name="testing"
-              style={{ height: '500px' }}
-            >
-              <p className="card-text">Testing</p>
-            </div>
-          ) : (
-            <div
-              className="card col-lg-3 mr-2"
-              name="testing"
-              style={{ height: '500px' }}
-            >
-              <p className="card-text">Testing</p>
-              {testingTasks ? (
-                testingTasks.map((task) => {
-                  return (
-                    <div className="col-lg-12 mt-2">
-                      <Card id={task.id}>
-                        <div className="card drag">
-                          <div className="card-body">
-                            <h5 className="card-title">{task.title}</h5>
-                            <p className="card-text">{task.description}</p>
-                            <p className="card-text">{task.price} EGP</p>
-                          </div>
-                        </div>
-                      </Card>
-                    </div>
-                  );
-                })
-              ) : (
-                <></>
-              )}
-            </div>
-          )}
+            )}
 
-          {/* Done */}
-          {!doneTasks ? (
-            <div
-              className="card col-lg-3 mr-2"
-              name="done"
-              style={{ height: '500px' }}
-            >
-              <p className="card-text">Done</p>
-            </div>
-          ) : (
-            <>
+            {/* Done */}
+            {!doneTasks ? (
               <div
                 className="card col-lg-3 mr-2"
                 name="done"
                 style={{ height: '500px' }}
               >
                 <p className="card-text">Done</p>
-                {doneTasks ? (
-                  doneTasks.map((task) => {
+              </div>
+            ) : (
+              <>
+                <div
+                  className="card col-lg-3 mr-2"
+                  name="done"
+                  style={{ height: '500px' }}
+                >
+                  <p className="card-text">Done</p>
+                  {doneTasks ? (
+                    doneTasks.map((task) => {
+                      return (
+                        <div className="col-lg-12 mt-2">
+                          <Card
+                            id={task.id}
+                            price={task.price}
+                            title={task.title}
+                            description={task.description}
+                          >
+                            <div className="card drag">
+                              <div className="card-body">
+                                <h5 className="card-title">{task.title}</h5>
+                                <p className="card-text">{task.description}</p>
+                                <p className="card-text" name="price">
+                                  {task.price} EGP
+                                </p>
+                              </div>
+                            </div>
+                          </Card>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* paid tasks */}
+            {!paidTasks ? (
+              <div
+                className="card col-lg-3 mr-2"
+                name="paid"
+                style={{ height: '500px' }}
+              >
+                <p className="card-text">Paid</p>
+              </div>
+            ) : (
+              <div
+                className="card col-lg-3 mr-2"
+                name="paid"
+                style={{ height: '500px' }}
+              >
+                <p className="card-text">Paid</p>
+                {paidTasks ? (
+                  paidTasks.map((task) => {
                     return (
                       <div className="col-lg-12 mt-2">
-                        <Card id={task.id}>
+                        <Card
+                          id={task.id}
+                          price={task.price}
+                          title={task.title}
+                          description={task.description}
+                        >
+                          <div className="card drag">
+                            <div className="card-body">
+                              <h5 className="card-title">{task.title}</h5>
+                              <p className="card-text">{task.description}</p>
+                              <p className="card-text" name="price">
+                                {task.price} EGP
+                              </p>
+                            </div>
+                          </div>
+                        </Card>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <></>
+                )}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="row mt-5">
+            {!InprogressTasks ? (
+              <div
+                className="card col-lg-3 mr-2"
+                name="inprogress"
+                style={{ height: '500px' }}
+              >
+                <p className="card-text">In Progress</p>
+              </div>
+            ) : (
+              <div
+                className="card col-lg-3 mr-2"
+                name="inprogress"
+                style={{ height: '500px' }}
+              >
+                <p className="card-text">Inprogress</p>
+                {InprogressTasks ? (
+                  InprogressTasks.map((task) => {
+                    return (
+                      <div className="col-lg-12 mt-2">
+                        <Card
+                          id={task.id}
+                          price={task.price}
+                          title={task.title}
+                          description={task.description}
+                        >
+                          <div className="card drag">
+                            <div className="card-body">
+                              <h5 className="card-title">{task.title}</h5>
+                              <p className="card-text">{task.description}</p>
+                              <p className="card-text" name="price">
+                                {task.price} EGP
+                              </p>
+                            </div>
+                          </div>
+                        </Card>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <></>
+                )}
+              </div>
+            )}
+            {!testingTasks ? (
+              <div
+                className="card col-lg-3 mr-2"
+                name="testing"
+                style={{ height: '500px' }}
+              >
+                <p className="card-text">Testing</p>
+              </div>
+            ) : (
+              <div
+                className="card col-lg-3 mr-2"
+                name="testing"
+                style={{ height: '500px' }}
+              >
+                <p className="card-text">Testing</p>
+                {testingTasks ? (
+                  testingTasks.map((task) => {
+                    return (
+                      <div className="col-lg-12 mt-2">
+                        <Card
+                          id={task.id}
+                          price={task.price}
+                          title={task.title}
+                          description={task.description}
+                        >
                           <div className="card drag">
                             <div className="card-body">
                               <h5 className="card-title">{task.title}</h5>
@@ -163,99 +314,9 @@ const Tasks = () => {
                   <></>
                 )}
               </div>
-            </>
-          )}
-
-          {/* paid tasks */}
-          {!paidTasks ? (
-            <div
-              className="card col-lg-3 mr-2"
-              name="paid"
-              style={{ height: '500px' }}
-            >
-              <p className="card-text">Paid</p>
-            </div>
-          ) : (
-            <div
-              className="card col-lg-3 mr-2"
-              name="paid"
-              style={{ height: '500px' }}
-            >
-              <p className="card-text">Paid</p>
-              {paidTasks ? (
-                paidTasks.map((task) => {
-                  return (
-                    <div className="col-lg-12 mt-2">
-                      <Card id={task.id}>
-                        <div className="card drag">
-                          <div className="card-body">
-                            <h5 className="card-title">{task.title}</h5>
-                            <p className="card-text">{task.description}</p>
-                            <p className="card-text">{task.price} EGP</p>
-                          </div>
-                        </div>
-                      </Card>
-                    </div>
-                  );
-                })
-              ) : (
-                <></>
-              )}
-            </div>
-          )}
-        </div>
-        {/* {isFreelance == 'undefined' || 'null' ? (
-          <div className="row mt-5">
-            <div
-              className="card col-lg-3 mr-2"
-              name="testing"
-              style={{ height: '500px' }}
-            >
-              <div className="card-body" name="testing">
-                <p className="card-text">Testing</p>
-              </div>
-            </div>
-            <div
-              className="card col-lg-3 mr-2"
-              name="done"
-              style={{ height: '500px' }}
-            >
-              <div className="card-body" name="done">
-                <p className="card-text">Done</p>
-              </div>
-            </div>
-            <div
-              className="card col-lg-3 mr-2"
-              name="paid"
-              style={{ height: '500px' }}
-            >
-              <div className="card-body" name="paid">
-                <p className="card-text">Paid</p>
-              </div>
-            </div>
+            )}
           </div>
-        ) : (
-          <div className="row mt-5">
-            <div
-              className="card col-lg-3 mr-2"
-              name="inprogress"
-              style={{ height: '500px' }}
-            >
-              <div className="card-body" name="inprogress">
-                <p className="card-text">InProgress</p>
-              </div>
-            </div>
-            <div
-              className="card col-lg-3 mr-2"
-              name="testing"
-              style={{ height: '500px' }}
-            >
-              <div className="card-body" name="testing">
-                <p className="card-text">Testing</p>
-              </div>
-            </div>
-          </div>
-        )} */}
+        )}
       </Board>
     </div>
   );

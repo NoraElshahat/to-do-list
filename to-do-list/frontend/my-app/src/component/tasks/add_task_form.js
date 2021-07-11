@@ -4,7 +4,7 @@ import './form-style.css';
 import { useHistory } from 'react-router-dom';
 
 export default function AddTask() {
-  //   let history = useHistory();
+  let history = useHistory();
   const [task, setTask] = useState({ title: '', description: '', price: '' });
 
   function taskAdded(e) {
@@ -12,9 +12,9 @@ export default function AddTask() {
     axios.post('http://localhost:4000/tasks/add-task', task).then((res) => {
       console.log(task, 'task');
       console.log(res.data.data, 'task added');
-      //   if (res.data.data.length !== 0) {
-      //     history.push('/tasks');
-      //   }
+      if (res.data.data.length !== 0) {
+        history.push('/tasks');
+      }
     });
   }
 

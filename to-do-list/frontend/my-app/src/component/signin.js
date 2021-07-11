@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 export default function SignIn() {
+  let history = useHistory();
+
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -13,10 +15,20 @@ export default function SignIn() {
   }
   function userLogin(e) {
     e.preventDefault();
-    // let history = useHistory();
-    axios.post('http://localhost:4000/users/signin', user).then((res) => {
-      console.log(res.data.data, 'ssdsd');
-    });
+    axios
+      .post('http://localhost:4000/users/signin', user)
+      .then((res) => {
+        if (res.data.data) {
+          localStorage.setItem('name', res.data.data.name);
+          localStorage.setItem('token', res.data.data.token);
+          localStorage.setItem('amount', res.data.data.wallet_amount);
+
+          history.push('/tasks');
+        }
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   }
   return (
     <div className="container ">

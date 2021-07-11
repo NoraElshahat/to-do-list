@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 const Header = () => {
+  // function logout(e) {
+  //   e.preventDefault();
+  // }
   return (
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -12,6 +15,13 @@ const Header = () => {
             </Link>
           </div>
         </div>
+        <form class="form-inline my-2 my-lg-0">
+          {localStorage.getItem('freelance') == 'undefined'
+            ? 'Client ->  '
+            : 'Freelancer ->  '}
+          {localStorage.getItem('name')}
+          {/* <button className="btn btn-danger"> Log out</button> */}
+        </form>
       </div>
     </nav>
   );

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
 function SignUp() {
-  // let history = useHistory();
+  let history = useHistory();
   const [user, setUser] = useState({
     name: '',
     email: '',
@@ -23,6 +23,10 @@ function SignUp() {
     axios.post('http://localhost:4000/users/signup', user).then((res) => {
       console.log(res.data.data, 'ssdsd');
       localStorage.setItem('freelance', res.data.data.freelancer);
+      localStorage.setItem('name', res.data.data.name);
+      localStorage.setItem('token', res.data.data.token);
+      localStorage.setItem('amount', res.data.data.wallet_amount);
+      history.push('/sign-in');
     });
   }
   return (
